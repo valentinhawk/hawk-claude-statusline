@@ -1,0 +1,12 @@
+# Cache files (generated at runtime)
+.usage_cache.json
+.git_cache.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# OS
+.DS_Store
+Thumbs.db

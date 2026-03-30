@@ -245,7 +245,7 @@ def get_ctx(d):
     p_in, p_out, p_cc, p_cr = _detect_pricing(d)
     cost = (inp * p_in + cache_create * p_cc + cache_read * p_cr + out * p_out) / 1_000_000
 
-    return {"total": total, "size": size, "pct": pct, "input": inp + cache_read, "output": out, "cost": cost}
+    return {"total": total, "size": size, "pct": pct, "input": inp + cache_read + cache_create, "output": out, "cost": cost}
 
 
 # ============================================================================

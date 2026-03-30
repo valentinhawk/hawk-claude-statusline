@@ -424,19 +424,24 @@ def build_line3(d):
 
     branch = git["branch"]
 
-    # Changes
+    # Changes (colored: green +, red -, yellow ~, cyan ?)
+    FG_GRN = "\033[92m"
+    FG_RED = "\033[91m"
+    FG_YLW = "\033[93m"
+    FG_CYN = "\033[96m"
+    _r = f"{RESET}{BG_G2}{BOLD}"
     parts = []
     if git["lines_added"]:
-        parts.append(f"+{git['lines_added']}")
+        parts.append(f"{FG_GRN}+{git['lines_added']}{_r}")
     if git["lines_deleted"]:
-        parts.append(f"-{git['lines_deleted']}")
+        parts.append(f"{FG_RED}-{git['lines_deleted']}{_r}")
     if git["staged"]:
-        parts.append(f"{BULLET}{git['staged']}")
+        parts.append(f"{FG_GRN}{BULLET}{git['staged']}{_r}")
     if git["modified"]:
-        parts.append(f"~{git['modified']}")
+        parts.append(f"{FG_YLW}~{git['modified']}{_r}")
     if git["added"]:
-        parts.append(f"?{git['added']}")
-    change_text = " ".join(parts) if parts else ("-" if git["clean"] else "-")
+        parts.append(f"{FG_CYN}?{git['added']}{_r}")
+    change_text = " ".join(parts) if parts else "-"
 
     # Sync
     sync_parts = []

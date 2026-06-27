@@ -151,14 +151,32 @@ def get_effort(d):
     return None
 
 
+def _frame():
+    """Animation frame counter, advances 1 step/sec (needs refreshInterval: 1)."""
+    return int(time.time())
+
+
 def rainbow(text):
-    """Spread the rainbow palette across the characters of text (static)."""
-    n = max(1, len(text) - 1)
-    last = len(RAINBOW) - 1
+    """Per-letter rainbow that flows one step per second."""
+    n = len(RAINBOW)
+    span = max(1, len(text) - 1)
+    shift = _frame()
     return "".join(
-        f"\033[38;5;{RAINBOW[round(i * last / n)]}m{ch}"
+        f"\033[38;5;{RAINBOW[(round(i * (n - 1) / span) + shift) % n]}m{ch}"
         for i, ch in enumerate(text)
     )
+
+
+def shimmer(text):
+    """Violet text with a bright reflection sweeping across, one step per second."""
+    length = len(text)
+    pos = _frame() % length
+    out = []
+    for i, ch in enumerate(text):
+        dist = min((i - pos) % length, (pos - i) % length)
+        c = 231 if dist == 0 else 183 if dist == 1 else 141
+        out.append(f"\033[38;5;{c}m{ch}")
+    return "".join(out)
 
 
 def get_dir(d):
@@ -402,6 +420,8 @@ def build_line1(d, usage_raw):
         label = EFFORT_LABEL.get(effort, effort.capitalize())
         if effort == "max":
             badge = f"\033[38;5;196m{BOLT} {rainbow(label)}"
+        elif effort == "xhigh":
+            badge = f"\033[38;5;141m{BOLT} {shimmer(label)}"
         else:
             ec = EFFORT_FG.get(effort, FG_WHITE)
             badge = f"{ec}{BOLT} {label}"

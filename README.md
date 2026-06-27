@@ -38,7 +38,8 @@ A premium 3-line powerline status bar for [Claude Code](https://claude.ai/code).
 - Smart caching (60s API, 5s git)
 - Stale fallback when API is unavailable
 - Color-coded percentages (green/yellow/red)
-- Reasoning effort badge (low → max), color-coded
+- Reasoning effort badge (low → max), colors matched to Claude Code's palette
+- Animated `max` (rainbow) and `xhigh` (shimmer) badges via `refreshInterval`
 - Estimated session cost (pricing auto-detected per model)
 - Works on macOS, Linux, and Windows (Git Bash) - finds Python automatically
 
@@ -55,7 +56,7 @@ curl -sL https://raw.githubusercontent.com/valentinhawk/hawk-claude-statusline/m
 Copy and paste this prompt to Claude Code:
 
 ```
-Install the Hawk Claude Statusline from https://github.com/valentinhawk/hawk-claude-statusline. Download statusline.py and statusline.sh to ~/.claude/scripts/, make statusline.sh executable, and add this to my ~/.claude/settings.json: "statusLine": { "type": "command", "command": "bash ~/.claude/scripts/statusline.sh", "timeout": 10000 }
+Install the Hawk Claude Statusline from https://github.com/valentinhawk/hawk-claude-statusline. Download statusline.py and statusline.sh to ~/.claude/scripts/, make statusline.sh executable, and add this to my ~/.claude/settings.json: "statusLine": { "type": "command", "command": "bash ~/.claude/scripts/statusline.sh", "timeout": 10000, "refreshInterval": 1 }
 ```
 
 ### Manual
@@ -69,10 +70,15 @@ Install the Hawk Claude Statusline from https://github.com/valentinhawk/hawk-cla
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/scripts/statusline.sh",
-    "timeout": 10000
+    "timeout": 10000,
+    "refreshInterval": 1
   }
 }
 ```
+
+`refreshInterval: 1` re-runs the bar every second so the animated effort
+badges (`max` rainbow, `xhigh` shimmer) keep moving while idle. Remove it if
+you prefer the bar to update only on activity.
 
 4. Restart Claude Code
 

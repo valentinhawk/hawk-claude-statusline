@@ -9,7 +9,8 @@ A premium 3-line powerline status bar for [Claude Code](https://claude.ai/code).
 **Line 1 - Session**
 | Segment | Info |
 |---------|------|
-| 🧠 Model | Current Claude model (Opus 4.6, Sonnet, etc.) |
+| 🧠 Model | Current Claude model (Opus 4.8, Sonnet, etc.) |
+| ⚡ Effort | Reasoning effort level (low → max), color-coded; hidden when the model has no effort setting |
 | 💰 Cost | Estimated session cost based on token usage |
 | ⏱ 5h | 5-hour usage quota with reset countdown |
 | 📅 7d | 7-day usage quota with reset countdown |
@@ -37,8 +38,9 @@ A premium 3-line powerline status bar for [Claude Code](https://claude.ai/code).
 - Smart caching (60s API, 5s git)
 - Stale fallback when API is unavailable
 - Color-coded percentages (green/yellow/red)
-- Estimated session cost (based on Opus 4 pricing)
-- Works on macOS, Linux, and Windows (Git Bash)
+- Reasoning effort badge (low → max), color-coded
+- Estimated session cost (pricing auto-detected per model)
+- Works on macOS, Linux, and Windows (Git Bash) - finds Python automatically
 
 ## Install
 
@@ -104,6 +106,19 @@ If you see rendering artifacts below the status line, enable built-in glyphs:
     "builtinGlyphs": true
 }
 ```
+
+## Troubleshooting
+
+**Statusline is blank / install failed on Windows.** On a fresh Windows, typing
+`python3` opens the Microsoft Store stub instead of running Python, so a naive
+`python3 || python` launcher silently fails. The wrapper here tries `py`, then
+`python`, then `python3`, and verifies each one actually runs before using it,
+so it works out of the box. If Python is installed somewhere unusual, set an
+explicit path in your shell: `export CLAUDE_PY=/c/path/to/python`.
+
+**`bash: command not found` (Windows).** The statusline command runs through
+`bash`, which comes with [Git for Windows](https://git-scm.com/download/win).
+Install it, then restart Claude Code.
 
 ## License
 

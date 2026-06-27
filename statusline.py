@@ -6,7 +6,7 @@
 # ============================================================================
 """
 3-line powerline status bar for Claude Code.
-L1: 🧠 Model  💰 $cost  ⏱ 5h:X% ~reset  📅 7d:X% ~reset
+L1: 🧠 Model ⚡effort  💰 $cost  ⏱ 5h:X% ~reset  📅 7d:X% ~reset
 L2: 📊 [bar] X% total/size  📥 i:input  📤 o:output
 L3: 📂 Dir  🌿 branch  🔥 +add -del ~mod  🔄 ↑ahead ↓behind
 """
@@ -43,7 +43,17 @@ BLOCK = "\u2588"
 SHADE = "\u2591"
 BULLET = "\u25cf"
 ELLIP = "\u2026"
+BOLT = "\u26a1"
 BAR_WIDTH = 12
+
+# Effort level colors (low -> max, cool -> hot)
+EFFORT_FG = {
+    "low":    "\033[38;5;245m",  # gray
+    "medium": "\033[38;5;79m",   # teal
+    "high":   "\033[38;5;220m",  # gold
+    "xhigh":  "\033[38;5;208m",  # orange
+    "max":    "\033[38;5;196m",  # red
+}
 
 # -- Config --
 _NO_WIN = 0x08000000 if os.name == "nt" else 0
@@ -122,6 +132,14 @@ def get_model(d):
     if full:
         return full.replace("Claude ", "")
     return d.get("model", {}).get("id", "unknown").replace("claude-", "")
+
+
+def get_effort(d):
+    """Reasoning effort level (low/medium/high/xhigh/max); absent if unsupported."""
+    eff = d.get("effort")
+    if isinstance(eff, dict):
+        return eff.get("level")
+    return None
 
 
 def get_dir(d):
@@ -358,8 +376,13 @@ def build_line1(d, usage_raw):
     fh = usage_raw.get("five_hour", {}) if usage_raw else {}
     sd = usage_raw.get("seven_day", {}) if usage_raw else {}
 
-    # Model
-    s1 = seg("\U0001f9e0", get_model(d), BG_ACCENT, FG_ACCENT, BG_G1)
+    # Model (+ effort badge when the model exposes it)
+    model_txt = get_model(d)
+    effort = get_effort(d)
+    if effort:
+        ec = EFFORT_FG.get(effort, FG_WHITE)
+        model_txt = f"{model_txt} {ec}{BOLT}{effort}{RESET}{BG_ACCENT}{FG_WHITE}{BOLD}"
+    s1 = seg("\U0001f9e0", model_txt, BG_ACCENT, FG_ACCENT, BG_G1)
 
     # Cost
     s2 = seg("\U0001f4b0", f"${ctx['cost']:.2f}", BG_G1, FG_G1, BG_G2)

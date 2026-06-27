@@ -1,0 +1,6 @@
+# Keep scripts LF everywhere so bash/python run under Git Bash, macOS and Linux.
+# (CRLF in a .sh file makes bash fail with "$'\r': command not found".)
+*.sh  text eol=lf
+*.py  text eol=lf
+*.md  text eol=lf
+*.png binary

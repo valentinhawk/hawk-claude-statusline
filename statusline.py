@@ -381,7 +381,7 @@ def build_line1(d, usage_raw):
     effort = get_effort(d)
     if effort:
         ec = EFFORT_FG.get(effort, FG_WHITE)
-        model_txt = f"{model_txt} {ec}{BOLT}{effort}{RESET}{BG_ACCENT}{FG_WHITE}{BOLD}"
+        model_txt = f"{model_txt} {ec}{BOLT} {effort}{RESET}{BG_ACCENT}{FG_WHITE}{BOLD}"
     s1 = seg("\U0001f9e0", model_txt, BG_ACCENT, FG_ACCENT, BG_G1)
 
     # Cost

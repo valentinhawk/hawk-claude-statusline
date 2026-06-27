@@ -10,7 +10,7 @@ A premium 3-line powerline status bar for [Claude Code](https://claude.ai/code).
 | Segment | Info |
 |---------|------|
 | 🧠 Model | Current Claude model (Opus 4.8, Sonnet, etc.) |
-| ⚡ Effort | Reasoning effort level (low → max), color-coded; hidden when the model has no effort setting |
+| ⚡ Effort | Reasoning effort level (Low → Max); hidden when the model has no effort setting |
 | 💰 Cost | Estimated session cost based on token usage |
 | ⏱ 5h | 5-hour usage quota with reset countdown |
 | 📅 7d | 7-day usage quota with reset countdown |
@@ -38,7 +38,7 @@ A premium 3-line powerline status bar for [Claude Code](https://claude.ai/code).
 - Smart caching (60s API, 5s git)
 - Stale fallback when API is unavailable
 - Color-coded percentages (green/yellow/red)
-- Reasoning effort badge (low → max), colors matched to Claude Code's palette
+- Reasoning effort badge (low → max), shown next to the model
 - Estimated session cost (pricing auto-detected per model)
 - Works on macOS, Linux, and Windows (Git Bash) - finds Python automatically
 

@@ -46,15 +46,6 @@ ELLIP = "\u2026"
 BOLT = "\u26a1"
 BAR_WIDTH = 12
 
-# Effort level colors - matched to Claude Code's own /effort palette
-EFFORT_FG = {
-    "low":    "\033[38;5;227m",  # light yellow
-    "medium": "\033[38;5;120m",  # light green
-    "high":   "\033[38;5;117m",  # light sky blue
-    "xhigh":  "\033[38;5;183m",  # light violet
-    "max":    "\033[38;5;213m",  # light magenta (top of the gradient)
-}
-
 # Pretty display labels (unknown values fall back to .capitalize())
 EFFORT_LABEL = {
     "low": "Low", "medium": "Medium", "high": "High",
@@ -386,9 +377,8 @@ def build_line1(d, usage_raw):
     model_txt = get_model(d)
     effort = get_effort(d)
     if effort:
-        ec = EFFORT_FG.get(effort, FG_WHITE)
         label = EFFORT_LABEL.get(effort, effort.capitalize())
-        model_txt = f"{model_txt} {ec}{BOLT} {label}{RESET}{BG_ACCENT}{FG_WHITE}{BOLD}"
+        model_txt = f"{model_txt} {BOLT} {label}"
     s1 = seg("\U0001f9e0", model_txt, BG_ACCENT, FG_ACCENT, BG_G1)
 
     # Cost

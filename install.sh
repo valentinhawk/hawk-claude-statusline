@@ -49,7 +49,6 @@ cfg["statusLine"] = {
     "type": "command",
     "command": "bash ~/.claude/scripts/statusline.sh",
     "timeout": 10000,
-    "refreshInterval": 1,
 }
 with open(path, "w") as f:
     json.dump(cfg, f, indent=2)

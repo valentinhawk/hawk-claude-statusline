@@ -52,7 +52,7 @@ EFFORT_FG = {
     "medium": "\033[38;5;78m",   # green
     "high":   "\033[38;5;147m",  # periwinkle blue
     "xhigh":  "\033[38;5;141m",  # violet
-    "max":    "\033[38;5;196m",  # red (rendered as a rainbow, see below)
+    "max":    "\033[38;5;196m",  # red
 }
 
 # Pretty display labels (unknown values fall back to .capitalize())
@@ -60,9 +60,6 @@ EFFORT_LABEL = {
     "low": "Low", "medium": "Medium", "high": "High",
     "xhigh": "X-High", "max": "Max",
 }
-
-# "max" gets a per-letter rainbow (Claude Code animates it; we render it static)
-RAINBOW = [196, 208, 226, 46, 51, 21, 129]
 
 # -- Config --
 _NO_WIN = 0x08000000 if os.name == "nt" else 0
@@ -149,34 +146,6 @@ def get_effort(d):
     if isinstance(eff, dict):
         return eff.get("level")
     return None
-
-
-def _frame():
-    """Animation frame counter, advances 1 step/sec (needs refreshInterval: 1)."""
-    return int(time.time())
-
-
-def rainbow(text):
-    """Per-letter rainbow that flows one step per second."""
-    n = len(RAINBOW)
-    span = max(1, len(text) - 1)
-    shift = _frame()
-    return "".join(
-        f"\033[38;5;{RAINBOW[(round(i * (n - 1) / span) + shift) % n]}m{ch}"
-        for i, ch in enumerate(text)
-    )
-
-
-def shimmer(text):
-    """Violet text with a bright reflection sweeping across, one step per second."""
-    length = len(text)
-    pos = _frame() % length
-    out = []
-    for i, ch in enumerate(text):
-        dist = min((i - pos) % length, (pos - i) % length)
-        c = 231 if dist == 0 else 183 if dist == 1 else 141
-        out.append(f"\033[38;5;{c}m{ch}")
-    return "".join(out)
 
 
 def get_dir(d):
@@ -417,15 +386,9 @@ def build_line1(d, usage_raw):
     model_txt = get_model(d)
     effort = get_effort(d)
     if effort:
+        ec = EFFORT_FG.get(effort, FG_WHITE)
         label = EFFORT_LABEL.get(effort, effort.capitalize())
-        if effort == "max":
-            badge = f"\033[38;5;196m{BOLT} {rainbow(label)}"
-        elif effort == "xhigh":
-            badge = f"\033[38;5;141m{BOLT} {shimmer(label)}"
-        else:
-            ec = EFFORT_FG.get(effort, FG_WHITE)
-            badge = f"{ec}{BOLT} {label}"
-        model_txt = f"{model_txt} {badge}{RESET}{BG_ACCENT}{FG_WHITE}{BOLD}"
+        model_txt = f"{model_txt} {ec}{BOLT} {label}{RESET}{BG_ACCENT}{FG_WHITE}{BOLD}"
     s1 = seg("\U0001f9e0", model_txt, BG_ACCENT, FG_ACCENT, BG_G1)
 
     # Cost

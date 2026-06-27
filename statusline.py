@@ -52,7 +52,7 @@ EFFORT_FG = {
     "medium": "\033[38;5;78m",   # green
     "high":   "\033[38;5;147m",  # periwinkle blue
     "xhigh":  "\033[38;5;141m",  # violet
-    "max":    "\033[38;5;196m",  # red
+    "max":    "\033[38;5;201m",  # magenta (top of the gradient)
 }
 
 # Pretty display labels (unknown values fall back to .capitalize())

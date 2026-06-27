@@ -48,11 +48,11 @@ BAR_WIDTH = 12
 
 # Effort level colors - matched to Claude Code's own /effort palette
 EFFORT_FG = {
-    "low":    "\033[38;5;220m",  # yellow
-    "medium": "\033[38;5;78m",   # green
-    "high":   "\033[38;5;147m",  # periwinkle blue
-    "xhigh":  "\033[38;5;141m",  # violet
-    "max":    "\033[38;5;201m",  # magenta (top of the gradient)
+    "low":    "\033[38;5;227m",  # light yellow
+    "medium": "\033[38;5;120m",  # light green
+    "high":   "\033[38;5;117m",  # light sky blue
+    "xhigh":  "\033[38;5;183m",  # light violet
+    "max":    "\033[38;5;213m",  # light magenta (top of the gradient)
 }
 
 # Pretty display labels (unknown values fall back to .capitalize())

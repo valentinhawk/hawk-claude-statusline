@@ -46,13 +46,13 @@ ELLIP = "\u2026"
 BOLT = "\u26a1"
 BAR_WIDTH = 12
 
-# Effort level colors (low -> max, cool -> hot)
+# Effort level colors - matched to Claude Code's own /effort palette
 EFFORT_FG = {
-    "low":    "\033[38;5;245m",  # gray
-    "medium": "\033[38;5;79m",   # teal
-    "high":   "\033[38;5;220m",  # gold
-    "xhigh":  "\033[38;5;208m",  # orange
-    "max":    "\033[38;5;196m",  # red
+    "low":    "\033[38;5;220m",  # yellow
+    "medium": "\033[38;5;78m",   # green
+    "high":   "\033[38;5;147m",  # periwinkle blue
+    "xhigh":  "\033[38;5;141m",  # violet
+    "max":    "\033[38;5;196m",  # red (rendered as a rainbow, see below)
 }
 
 # Pretty display labels (unknown values fall back to .capitalize())
@@ -60,6 +60,9 @@ EFFORT_LABEL = {
     "low": "Low", "medium": "Medium", "high": "High",
     "xhigh": "X-High", "max": "Max",
 }
+
+# "max" gets a per-letter rainbow (Claude Code animates it; we render it static)
+RAINBOW = [196, 208, 226, 46, 51, 21, 129]
 
 # -- Config --
 _NO_WIN = 0x08000000 if os.name == "nt" else 0
@@ -146,6 +149,16 @@ def get_effort(d):
     if isinstance(eff, dict):
         return eff.get("level")
     return None
+
+
+def rainbow(text):
+    """Spread the rainbow palette across the characters of text (static)."""
+    n = max(1, len(text) - 1)
+    last = len(RAINBOW) - 1
+    return "".join(
+        f"\033[38;5;{RAINBOW[round(i * last / n)]}m{ch}"
+        for i, ch in enumerate(text)
+    )
 
 
 def get_dir(d):
@@ -386,9 +399,13 @@ def build_line1(d, usage_raw):
     model_txt = get_model(d)
     effort = get_effort(d)
     if effort:
-        ec = EFFORT_FG.get(effort, FG_WHITE)
         label = EFFORT_LABEL.get(effort, effort.capitalize())
-        model_txt = f"{model_txt} {ec}{BOLT} {label}{RESET}{BG_ACCENT}{FG_WHITE}{BOLD}"
+        if effort == "max":
+            badge = f"\033[38;5;196m{BOLT} {rainbow(label)}"
+        else:
+            ec = EFFORT_FG.get(effort, FG_WHITE)
+            badge = f"{ec}{BOLT} {label}"
+        model_txt = f"{model_txt} {badge}{RESET}{BG_ACCENT}{FG_WHITE}{BOLD}"
     s1 = seg("\U0001f9e0", model_txt, BG_ACCENT, FG_ACCENT, BG_G1)
 
     # Cost

@@ -55,6 +55,12 @@ EFFORT_FG = {
     "max":    "\033[38;5;196m",  # red
 }
 
+# Pretty display labels (unknown values fall back to .capitalize())
+EFFORT_LABEL = {
+    "low": "Low", "medium": "Medium", "high": "High",
+    "xhigh": "X-High", "max": "Max",
+}
+
 # -- Config --
 _NO_WIN = 0x08000000 if os.name == "nt" else 0
 USAGE_API_URL = "https://api.anthropic.com/api/oauth/usage"
@@ -381,7 +387,8 @@ def build_line1(d, usage_raw):
     effort = get_effort(d)
     if effort:
         ec = EFFORT_FG.get(effort, FG_WHITE)
-        model_txt = f"{model_txt} {ec}{BOLT} {effort}{RESET}{BG_ACCENT}{FG_WHITE}{BOLD}"
+        label = EFFORT_LABEL.get(effort, effort.capitalize())
+        model_txt = f"{model_txt} {ec}{BOLT} {label}{RESET}{BG_ACCENT}{FG_WHITE}{BOLD}"
     s1 = seg("\U0001f9e0", model_txt, BG_ACCENT, FG_ACCENT, BG_G1)
 
     # Cost
